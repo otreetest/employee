@@ -1,20 +1,103 @@
 {{ block title }}
-Performance Reporting from the Manager
+<style>
+    /* Title row styling */
+    .title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+    }
+    
+    /* Title text styling */
+    .title-text {
+        margin-right: 20px;
+    }
+    
+    /* Cards container */
+    .title-cards {
+        display: flex;
+        gap: 20px;
+        margin-top: -10px; /* Adjust vertical alignment */
+    }
+    
+    /* Card styling */
+    .group-name-card,
+    .group-org-card {
+        min-width: 10rem;
+        width: 300px; /* Wider cards at 260px */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-height: 120px; /* Reduced height for flatter cards */
+        overflow: hidden;
+        font-size: 0.85rem;
+    }
+    
+    /* Card parts styling */
+    .card-body {
+        padding: 0.5rem; /* Reduced padding */
+        display: flex;
+        align-items: center;
+    }
+    
+    .card-header {
+        padding: 0.35rem 0.5rem; /* Reduced padding */
+        font-size: 0.9rem;
+    }
+    
+    /* Card body content styling for compact layout */
+    .card-body p {
+        margin-bottom: 0; /* Remove bottom margin */
+    }
+    
+    /* Image styling - higher specificity and !important */
+    .title-cards .group-name-card img,
+    .title-cards .group-org-card img {
+        height: 4rem !important; 
+        width: 4rem !important;
+        object-fit: contain !important;
+        max-height: 4rem !important;
+        max-width: 4rem !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .title-row {
+            flex-direction: column;
+        }
+        
+        .title-cards {
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .group-name-card,
+        .group-org-card {
+            width: 220px; /* Wider on mobile but still fits */
+        }
+        
+        .group-name-card img,
+        .group-org-card img {
+            height: 3rem !important; /* Keep 3rem height on mobile */
+        }
+    }
+</style>
+<div class="title-row">
+    <div class="title-text">Performance Reporting from the Manager</div>
+    <div class="title-cards">
+        {% include_sibling "GroupNameComponent.html" %}
+        {% include_sibling "GroupOrgComponent.html" %}
+    </div>
+</div>
 {{ endblock }}
 {{ block content }}
-<div class="group-image-layout">
-    <div>
-        <p>In addition to the $1 of fixed compensation they will receive, managers can earn an extra bonus based on the points they report, with a maximum bonus of $2.</p>
+<br>
+<p>In addition to the $1 of fixed compensation they will receive, managers can earn an extra bonus based on the points they report, with a maximum bonus of $2.</p>
 
-        <p>If they report {{ threshold_integer }} points or less, they will receive no bonus.</strong> For <b>each score above {{ threshold_integer }}</b>, they will earn <b>an extra $0.50</b>.</p>
-        
-        <p>On the next page, the manager will need to report the score she/he has achieved. Please note that the bonus payment is based solely on the score <b>reported </b>by the manager, <b>not the actual </b>number of questions answered correctly. </p>
+<p>If they report {{ threshold_integer }} points or less, they will receive no bonus.</strong> For <b>each score above {{ threshold_integer }}</b>, they will earn <b>an extra $0.50</b>.</p>
 
-    </div>
-    {% include_sibling "GroupOrgComponent.html" %}
-    {% include_sibling "GroupNameComponent.html" %}
+<p>On the next page, the manager will need to report the score she/he has achieved. Please note that the bonus payment is based solely on the score <b>reported </b>by the manager, <b>not the actual </b>number of questions answered correctly. </p>
 
-</div>
+
 
 {{ next_button }}
 

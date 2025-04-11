@@ -11,7 +11,7 @@ Painting Selection
     }
 
     .img-container img {
-        height: 18rem;
+        height: 13rem;
         width: auto;
     }
 </style>
@@ -19,7 +19,8 @@ Painting Selection
 <p>Below you will see two paintings. The artists’ names are not displayed to ensure your choice is based solely on your personal preference.</p>
 <ul>
     <li>Choose the one you prefer.</li>
-    <li>Your choice will be shared with your partner.</li>
+    <li>Your choice will help decide <b>the name of your team</b>.</li>
+    <li>Your choice will be shared with your manager.</li>
 </ul>
 <div class="container">
     <div class="img-container">
@@ -31,6 +32,6 @@ Painting Selection
 {{ formfield "prefer" }}
 
 
-<div class="text-center">{{ next_button }}</div>
+{{ next_button }}
 
 {{ endblock }}

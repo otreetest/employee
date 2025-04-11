@@ -1,14 +1,14 @@
-<!-- This component shows the team information -->
-<div class="card group-name-card">
-    <div class="card-header bg-info text-white">
-        Your team
+<!-- This component shows the player's choice with a red header -->
+<div class="card player-choice-card">
+    <div class="card-header bg-danger text-white">
+        Your choice
     </div>
     <div class="card-body">
-        <p>You are in the team: 
-            {% if group.field_maybe_none('prefer') == 'Left' %}
-                <strong>Klee</strong>
+        <p>Your choosed: 
+            {% if player.field_maybe_none('prefer') == 'Left' %}
+                <br><strong>Klee</strong>
                     <br><img src="{{ static 'img/PaulKlee.jpg' }}" alt="Paul Klee Painting" style="height: 6rem; width: auto;">
-            {% elif group.field_maybe_none('prefer') == 'Right' %}
+            {% elif player.field_maybe_none('prefer') == 'Right' %}
                 <strong>Kandinsky</strong>
                     <br><img src="{{ static 'img/VassilyKandinsky.jpg' }}" alt="Vassily Kandinsky Painting" style="height: 6rem; width: auto;">
             {% else %}

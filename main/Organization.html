@@ -3,13 +3,51 @@ Organization
 {{ endblock }}
 
 {{ block content }}
+<style>
+    /* Container styling */
+    .group-image-layout {
+        position: relative;
+        min-height: 200px; /* Ensure there's space for content */
+    }
+    
+    /* Card positioning */
+    .org-card-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 220px;
+    }
+    
+    /* Content positioning */
+    .main-content {
+        max-width: calc(100% - 240px); /* Leave space for the card */
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .org-card-container {
+            position: relative;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 220px;
+            margin-left: auto;
+        }
+        
+        .main-content {
+            max-width: 100%;
+        }
+    }
+</style>
+
 <div class="group-image-layout">
-<p>You and your manager belong to an organization. Your organization has chosen to donate <b>$2</b> to the <b>{{ organization }}</b>.</p>
-    <div>
-    {% include_sibling "GroupOrgComponent.html" %}
+    <div class="main-content">
+        <p>You and your manager both belong to organization ABC. 
+            <br>
+            Your organization has chosen to donate <b>$2</b> to the <b>{{ organization }}</b>.</p>
     </div>
-    <div>
-    {% include_sibling "GroupNameComponent.html" %}
+    
+    <div class="org-card-container">
+        {% include_sibling "GroupOrgComponent.html" %}
     </div>
 </div>
 

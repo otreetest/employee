@@ -169,7 +169,7 @@ def creating_session(self:Subsession):
 
 class Group(BaseGroup):
     prefer = models.StringField()
-    department = models.StringField()
+    team = models.StringField()
     organization = models.StringField()
     
     # Fields to store matched manager data
@@ -346,13 +346,13 @@ class Role(Page):
             # Set the group's prefer based on the manager's preference
             group.prefer = group.manager_prefer
             
-            # Map the preference to a department
+            # Map the preference to a team
             painting_mapping = {
                 'Left': 'Klee',
                 'Right': 'Kandinsky'
             }
             if group.prefer in painting_mapping:
-                group.department = painting_mapping[group.prefer]
+                group.team = painting_mapping[group.prefer]
             
             # Randomly select an organization
             group.organization = random.choice(C.CHALLENGE_CHOICES)
@@ -383,7 +383,7 @@ class Painting(Page):
         manager_prefer = group.field_maybe_none('manager_prefer') or 'Not available'
         return {
             'manager_prefer': manager_prefer,
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned'
         }
     
@@ -396,7 +396,7 @@ class GroupInfo(Page):
     def vars_for_template(self):
         group = self.group
         return {
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned'
         }
 
@@ -408,7 +408,7 @@ class Charity(Page):
     def vars_for_template(self):
         group = self.group
         return {
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned'
         }
 
@@ -419,7 +419,7 @@ class Organization(Page):
         group = player.group
         return {
             'organization': group.field_maybe_none('organization') or 'Not assigned',
-            'department': group.field_maybe_none('department') or 'Not assigned'
+            'team': group.field_maybe_none('team') or 'Not assigned'
         }
 
 
@@ -427,7 +427,7 @@ class MatchingResult(Page):
     def vars_for_template(self):
         group = self.group
         return {
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned',
             'player_prefer': self.field_maybe_none('prefer'),
             'group_prefer': group.field_maybe_none('prefer')
@@ -438,7 +438,7 @@ class BeforeIQTest(Page):
     def vars_for_template(self):
         group = self.group
         return {
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned'
         }
 
@@ -447,7 +447,7 @@ class MisreportingRule2(Page):
     def vars_for_template(self):
         group = self.group
         return {
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned',
             'threshold_integer': self.field_maybe_none('manager_threshold_integer') or '8'  # Default to 8 if not found
         }
@@ -470,7 +470,7 @@ class Audit(Page):
             'stated_amount': stated_amount,
             'correct_amount': correct_amount,
             'manager_id': self.field_maybe_none('matched_manager_id') or 'Not matched',
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned'
         }
     
@@ -491,7 +491,7 @@ class Survey_m(Page):
     def vars_for_template(self):
         group = self.group
         return {
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned',
             'player_prefer': self.field_maybe_none('prefer'),
             'group_prefer': group.field_maybe_none('prefer')
@@ -505,7 +505,7 @@ class Survey_o(Page):
     def vars_for_template(self):
         group = self.group
         return {
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned'
         }
 
@@ -542,7 +542,7 @@ class Result(Page):
         
         return {
             'manager_id': self.field_maybe_none('matched_manager_id') or 'Not matched',
-            'department': group.field_maybe_none('department') or 'Not assigned',
+            'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned',
             'report': report_status,
             'player_payoff': self.payoff
@@ -552,8 +552,8 @@ class Result(Page):
 page_sequence = [
     Role,
     Painting,
-    Organization,
     MatchingResult,
+    Organization,
     BeforeIQTest,
     MisreportingRule2,
     Audit,
