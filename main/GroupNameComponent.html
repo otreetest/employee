@@ -1,0 +1,19 @@
+<!-- This component shows the department information -->
+<div class="card mb-3">
+    <div class="card-header bg-info text-white">
+        Your Department
+    </div>
+    <div class="card-body">
+        <p>You are in the department: 
+            {% if group.field_maybe_none('prefer') == 'Left' %}
+                <strong>Klee</strong>
+                    <br><img src="{{ static 'img/PaulKlee.jpg' }}" alt="Paul Klee Painting" style="height: 8rem; width: auto;">
+            {% elif group.field_maybe_none('prefer') == 'Right' %}
+                <strong>Kandinsky</strong>
+                    <br><img src="{{ static 'img/VassilyKandinsky.jpg' }}" alt="Vassily Kandinsky Painting" style="height: 8rem; width: auto;">
+            {% else %}
+                <strong>Not assigned</strong>
+            {% endif %}
+        </p>
+    </div>
+</div>

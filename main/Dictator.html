@@ -1,0 +1,50 @@
+{{ block title }}
+Survey
+{{ endblock }}
+
+{{ block content }}
+<div>
+    <p>
+        In this activity, imagine you are paired with another person, and you have been given $10 to use in this exercise. Your task is to decide how much of this money 
+        you wish to keep for yourself and how much you wish to give to the other person.
+    </p>
+    <p>
+        You have complete control over this decision - you may keep all $10 for yourself, 
+        give all $10 to the other person, or choose any amount in between.
+    </p>
+    
+    <div class="form-group">
+        <p>I choose to keep<b> $<span id="keep-amount">0</span> </b>for myself.</p>
+        <p>I choose to give<b> $<span id="give-amount">10</span> </b>to the other person.</p>
+        <p>Total equals $10</p>
+        
+        <input type="range" class="form-control-range" id="dictator-slider" 
+               min="0" max="10" step="0.1" value="0"
+               oninput="updateAmounts(this.value)" 
+               onchange="document.getElementById('id_dictator_keep').value = this.value">
+        
+        <!-- Hidden field to store the actual value -->
+        {{ formfield 'dictator_keep' }}
+    </div>
+    
+    <script>
+        // Hide the default form field (we'll use our custom slider instead)
+        document.getElementById('id_dictator_keep').style.display = 'none';
+        
+        // Function to update the displayed amounts
+        function updateAmounts(keepAmount) {
+            keepAmount = parseFloat(keepAmount).toFixed(1);
+            giveAmount = (10 - keepAmount).toFixed(1);
+            
+            document.getElementById('keep-amount').textContent = keepAmount;
+            document.getElementById('give-amount').textContent = giveAmount;
+            document.getElementById('id_dictator_keep').value = keepAmount;
+        }
+        
+        // Initialize with default values
+        updateAmounts(0);
+    </script>
+    
+    {{ next_button }}
+</div>
+{{ endblock }}

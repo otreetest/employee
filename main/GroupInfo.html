@@ -1,0 +1,26 @@
+{{ block title }}
+{{ endblock }}
+{{ block content }}
+<div class="group-image-layout">
+    <div>
+        <h2>Group Information</h2>
+            {{if player.prefer == group.prefer }}
+                <p>Your manager selected the <strong>same</strong> painting with you.</p>
+                <br>
+                Your department will be named after the artist of the selected painting.
+            {{else}}
+                <p>Your manager selected a <strong>different</strong> painting from you.</p>
+                <br>
+                Your department will be named after the artist of the painting chosen <b>by your manager</b>.
+            {{endif}}
+
+        <p>
+            The department is now called: <b>{{group.department}}</b>, and this painting will represent your department.
+        </p>
+
+    </div>
+    {% include_sibling "GroupNameComponent.html" %}
+</div>
+{{ next_button }}
+
+{{ endblock }}

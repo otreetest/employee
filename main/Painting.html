@@ -1,0 +1,36 @@
+{{ block title }}
+Painting Selection
+{{ endblock }}
+{{ block content }}
+<style>
+    .img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem
+    }
+
+    .img-container img {
+        height: 18rem;
+        width: auto;
+    }
+</style>
+
+<p>Below you will see two paintings. The artists’ names are not displayed to ensure your choice is based solely on your personal preference.</p>
+<ul>
+    <li>Choose the one you prefer.</li>
+    <li>Your choice will be shared with your partner.</li>
+</ul>
+<div class="container">
+    <div class="img-container">
+        <img src="{{static 'img/PaulKlee.jpg'}}" alt="Image 1">
+        <img src="{{static 'img/VassilyKandinsky.jpg'}}" alt="Image 2">
+    </div>
+</div>
+
+{{ formfield "prefer" }}
+
+
+<div class="text-center">{{ next_button }}</div>
+
+{{ endblock }}

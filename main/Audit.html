@@ -1,0 +1,25 @@
+{{ block title }}
+Audit
+{{ endblock }}
+{{ block content }}
+<div class="group-image-layout">
+<p>
+    Your manager stated that they achieved <b>{{ stated_amount }}</b> points, but they answered {{ correct_amount }} questions correctly and thus their actual score is <b>{{ correct_amount }}</b>.
+    <br>
+    <br>
+    You have the option to report your manager if there is a discrepancy. lf you report them, <b>their forfeited bonus (up tp $2) will be donated to the organization's chosen charity</b>.  
+    <br>
+    <br>
+    Please <b>enter an integer </b>between 0 and 100, which represents the probability that you will report your manager (0 means you will definitely not report, and 100 means you will definitely report). 
+    <br>
+    <br>
+    Then we have a special insepction. The system will randomly generate another integer between 0 and 100, as the success rate of your reporting. If your input is greater than this integer, then your report is successful and the manager will lose all his bonuses.
+</p>
+    {% include_sibling "GroupOrgComponent.html" %}
+    {% include_sibling "GroupNameComponent.html" %}
+</div>
+{{ formfields }}
+
+{{ next_button }}
+
+{{ endblock }}

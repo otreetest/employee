@@ -1,0 +1,57 @@
+{{ block title }}
+Survey
+{{ endblock }}
+{{ block content }}
+<style>
+    ._formfield {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+    .form-check-label{
+        width: 3rem;
+        text-align: center;
+        cursor: pointer;
+    }
+    .col-form-label {
+        flex-basis: 16rem;
+    }
+    .option-table{
+        margin-left: 16rem;
+        width: 32rem;
+        table-layout: fixed;
+        text-align: center;
+    }
+    @media (max-width: 50rem) {
+        .option-table {
+            margin-left: 0;
+        }
+    }
+</style>
+<p>
+    Please answer the following questions. Please use a scale from 1 to 5, where 1 means you disagree strongly and 5
+    means you strongly agree. You can also use the values in-between to indicate where you fall on the scale.
+    I see myself as a person who...
+</p>
+<div>
+    <table class="table table-bordered option-table">
+        <tr>
+            <td>Disagree strongly</td>
+            <td>Disagree a little</td>
+            <td>Neither agree nor disagree</td>
+            <td>Agree a little</td>
+            <td>Strongly agree</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+    </table>
+</div>
+{{ formfields }}
+{{ next_button }}
+
+{{ endblock }}

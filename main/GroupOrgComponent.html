@@ -1,0 +1,19 @@
+<!-- This component shows the organization information -->
+<div class="card mb-3">
+    <div class="card-header bg-primary text-white">
+        Your Organization
+    </div>
+    <div class="card-body">
+        <p>Your organization will donate to: 
+            {% if group.field_maybe_none('organization') == 'NRA' %}
+                <strong>NRA</strong>
+                    <br><img src="{{ static 'img/NRA.png' }}" alt="NRA" style="height: 8rem; width: auto;">
+            {% elif group.field_maybe_none('organization') == 'Red Cross' %}
+                <strong>Red Cross</strong>
+                    <br><img src="{{ static 'img/RedCross.png' }}" alt="Red Cross" style="height: 8rem; width: auto;">
+            {% else %}
+                <strong>Not assigned</strong>
+            {% endif %}
+        </p>
+    </div>
+</div>

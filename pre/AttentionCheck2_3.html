@@ -1,0 +1,13 @@
+{{ block title }}
+Attention Check
+{{ endblock }}
+{{ block content }}
+
+<p>
+    The correct number is <b>{{player.attention_check_num2}}</b>. You didn’t pass the second attention check.
+    You have <b>one</b> more opportunities, if you fail to pass the last one attention check, you will be quitted from the current experiment.
+</p>
+
+{{ next_button }}
+
+{{ endblock }}

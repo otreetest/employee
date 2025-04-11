@@ -1,0 +1,33 @@
+{{ block title }}
+Charity Donation
+{{ endblock }}
+{{ block content }}
+<style>
+    img {
+        height: 6rem;
+        width: auto;
+    }
+</style>
+
+<p>
+    Below are two charities and your organization is considering making a donation to one of them:
+</p>
+<ul>
+    <li>
+        <p><b>National Rifle Association (NRA)</b> : A U.S.-based gun rights advocacy group.</p>
+        <img src="{{static 'img/NRA.png'}}" alt="NRA">
+    </li>
+    <li>
+        <p><b>Red Cross</b> : A global humanitarian organization focused on health and safety.</p>
+        <img src="{{static 'img/RedCross.png'}}" alt="RedCross">
+    </li>
+</ul>
+
+<ol>
+    <li><b>Department:</b> You and your manager form a department that is working for the researchers of this study.</li>
+    <li><b>Organization:</b> The researchers of this study can be considered your organization.</li>
+</ol>
+
+{{ next_button }}
+
+{{ endblock }}

@@ -1,0 +1,28 @@
+{{ block title }}
+Matching Result
+{{ endblock }}
+
+{{ block content }}
+<div class="group-image-layout">
+    {% if player.field_maybe_none('prefer') == group.field_maybe_none('prefer') %}
+        <p>Your manager selected the <strong>same</strong> painting with you.
+        <br>  
+        Your department is named after: <b>{{ department }}</b>
+        </p>
+    {% else %}
+        <p>Your manager selected a <strong>different</strong> painting from you.
+        <br>
+        Your department is named after: <b>{{ department }}</b>
+        </p>
+    {% endif %}
+    <div>
+    {% include_sibling "GroupOrgComponent.html" %}
+    </div>
+    <div>
+    {% include_sibling "GroupNameComponent.html" %}
+    </div>
+</div>
+
+{{ next_button }}
+
+{{ endblock }}

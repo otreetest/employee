@@ -1,0 +1,22 @@
+{{ block title }}
+Graphical Questions 
+{{ endblock }}
+{{ block content }}
+<div class="group-image-layout">
+    <div>
+        <p>Previously, your manager has worked on a graph-based problem set consisting of 15 questions in total.</p>
+
+        <ul>
+            <li><strong>Questions:</strong> 15</li>
+            <li><strong>Time:</strong> 3 minutes</li>
+            <li><strong>Scoring:</strong> 1 point per correct answer</li>
+        </ul>
+    
+    </div>
+    {% include_sibling "GroupOrgComponent.html" %}
+    {% include_sibling "GroupNameComponent.html" %}
+    
+</div>
+{{ next_button }}
+
+{{ endblock }}

@@ -1,0 +1,18 @@
+{{ block title }}
+Organization
+{{ endblock }}
+
+{{ block content }}
+<div class="group-image-layout">
+<p>You and your manager belong to an organization. Your organization has chosen to donate <b>$2</b> to the <b>{{ organization }}</b>.</p>
+    <div>
+    {% include_sibling "GroupOrgComponent.html" %}
+    </div>
+    <div>
+    {% include_sibling "GroupNameComponent.html" %}
+    </div>
+</div>
+
+{{ next_button }}
+
+{{ endblock }}

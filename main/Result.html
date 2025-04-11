@@ -1,0 +1,22 @@
+{{ block title }}
+Result
+{{ endblock }}
+
+{{ block content }}
+<p>
+    Thank you for completing this task.
+</p>
+<p>
+    After the inspection, the whistleblowing is {% if report %} successful {% else %} unsuccessful {% endif %}.
+</p>
+<p>
+    Your payoff is <b>{{ participant.payoff }}</b>.
+</p>
+
+<p>
+    Your completion code is XXXXXXXXXXXX</b>.
+</p>
+
+{{ next_button }}
+
+{{ endblock }}
