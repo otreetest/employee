@@ -212,9 +212,6 @@ class Player(BasePlayer):
     SM2 = models.IntegerField(label=C.SURVEY_M_QUESTIONS[1], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
     SM3 = models.IntegerField(label=C.SURVEY_M_QUESTIONS[2], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
     SM4 = models.IntegerField(label=C.SURVEY_M_QUESTIONS[3], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
-    SM5 = models.IntegerField(label=C.SURVEY_M_QUESTIONS[4], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
-    SM6 = models.IntegerField(label=C.SURVEY_M_QUESTIONS[5], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
-    SM7 = models.IntegerField(label=C.SURVEY_M_QUESTIONS[6], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
     
     SO1 = models.IntegerField(label=C.SURVEY_O_QUESTIONS[0], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
     SO2 = models.IntegerField(label=C.SURVEY_O_QUESTIONS[1], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
