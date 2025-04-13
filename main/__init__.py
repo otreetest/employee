@@ -17,13 +17,10 @@ class C(BaseConstants):
     PREFER_CHOICES = ['Left', 'Right']
     CHALLENGE_CHOICES = ['NRA', 'Red Cross']
     SURVEY_M_QUESTIONS = [
-        'I always pay a lot of attention to how I do things compared with how others do things.',
-        'I am not the type of person who compares often with others.',
-        'I often compare how I am doing socially (e.g., social skills, popularity) with other people.',
-        'I see myself as someone who enjoys winning and hates losing.',
-        'I see myself as someone who enjoys competing, regardless of whether I win or lose.',
-        'I see myself as a competitive person.',
-        'Competition brings the best out of me.',
+        'I see myself as a member of the team.',
+        'I am glad to be in this team.',
+        'I feel strong ties with the team.',
+        'I identify myself with the department.',
     ]
     SURVEY_O_QUESTIONS = [
         'I am proud of the contribution to social causes of my organization.',
@@ -402,16 +399,7 @@ class GroupInfo(Page):
 
 
 class Charity(Page):
-    form_model = 'player'
-    form_fields = ['charity_1', 'charity_2']
-    
-    def vars_for_template(self):
-        group = self.group
-        return {
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned'
-        }
-
+    pass
 
 class Organization(Page):
     @staticmethod
@@ -553,6 +541,7 @@ page_sequence = [
     Role,
     Painting,
     MatchingResult,
+    Charity,
     Organization,
     BeforeIQTest,
     MisreportingRule2,
