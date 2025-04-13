@@ -10,31 +10,22 @@ Organization
         min-height: 200px; /* Ensure there's space for content */
     }
     
-    /* Card positioning */
-    .org-card-container {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 220px;
+    /* Main content positioning - keep as in the original */
+    .main-content {
+        max-width: 100%;
     }
     
-    /* Content positioning */
-    .main-content {
-        max-width: calc(100% - 240px); /* Leave space for the card */
+    /* Card positioning - centered horizontally */
+    .org-card-container {
+        width: 220px;
+        margin: 20px auto; /* Center horizontally with some top margin */
     }
     
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .org-card-container {
-            position: relative;
-            margin-top: 20px;
-            width: 100%;
             max-width: 220px;
-            margin-left: auto;
-        }
-        
-        .main-content {
-            max-width: 100%;
+            width: 100%;
         }
     }
 </style>
