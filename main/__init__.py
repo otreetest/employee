@@ -1,7 +1,7 @@
 import random
 import csv
 import os
-
+from otree.api import WaitPage
 from otree.api import *
 
 doc = """
@@ -384,7 +384,10 @@ class Painting(Page):
     def live_method(self, data):
         group = self.group
         return {self.id_in_group: 'success'}
+    
 
+class WaitingPage1(Page):
+    timeout_seconds = 5
 
 class GroupInfo(Page):
     def vars_for_template(self):
@@ -393,7 +396,7 @@ class GroupInfo(Page):
             'team': group.field_maybe_none('team') or 'Not assigned',
             'organization': group.field_maybe_none('organization') or 'Not assigned'
         }
-
+    
 
 class Charity(Page):
     pass
@@ -407,6 +410,9 @@ class Organization(Page):
             'team': group.field_maybe_none('team') or 'Not assigned'
         }
 
+class WaitingPage2(Page):
+    timeout_seconds = 5
+    
 
 class MatchingResult(Page):
     def vars_for_template(self):
@@ -537,8 +543,10 @@ class Result(Page):
 page_sequence = [
     Role,
     Painting,
+    WaitingPage1, 
     MatchingResult,
     Charity,
+    WaitingPage2, 
     Organization,
     BeforeIQTest,
     MisreportingRule2,
