@@ -209,28 +209,28 @@ class Player(BasePlayer):
     report = models.BooleanField()
     
     choiceE = models.CharField(
-        label="Question 1<br><br><img src='/static/img/PaulKlee.jpg' style='width: 160px; max-width: 100%;'>  <img src='/static/img/VassilyKandinsky.jpg' style='width: 160px; max-width: 100%;'><br><br>Please indicate the painting that you selected at the beginning of the game:<br><br>",
+        label="<img src='/static/img/PaulKlee.jpg' style='width: 160px; max-width: 100%;'>  <img src='/static/img/VassilyKandinsky.jpg' style='width: 160px; max-width: 100%;'><br><br>1) Please indicate the painting that <b>you selected</b> at the beginning of the game:<br>",
         choices=["Klee", "Kandinsky"],
         widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
         blank=False
     )
 
     choiceM = models.CharField(
-        label="Question 2<br><br><img src='/static/img/PaulKlee.jpg' style='width: 160px; max-width: 100%;'>  <img src='/static/img/VassilyKandinsky.jpg' style='width: 160px; max-width: 100%;'><br><br>Please indicate the painting that your manager selected at the beginning of the game:<br><br>",
+        label="2) Please indicate the painting that <b>your manager selected </b>at the beginning of the game:<br>",
         choices=["Klee", "Kandinsky"],
         widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
         blank=False
     )
 
     choiceT = models.CharField(
-        label="Question 3<br><br><img src='/static/img/PaulKlee.jpg' style='width: 160px; max-width: 100%;'>  <img src='/static/img/VassilyKandinsky.jpg' style='width: 160px; max-width: 100%;'><br><br>Please indicate the painting that represented your team:<br><br>",
+        label="3) Please indicate the painting that <b>represented your team</b>:<br>",
         choices=["Klee", "Kandinsky"],
         widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
         blank=False
     )
 
     choiceO = models.CharField(
-        label="Question 4<br><br><img src='/static/img/RedCross.png' style='width: 160px; max-width: 100%;'>  <img src='/static/img/NRA.png' style='width: 160px; max-width: 100%;'><br><br>Please indicate the charity that your organization donated to:<br><br>",
+        label="<br><img src='/static/img/RedCross.png' style='width: 160px; max-width: 100%;'>  <img src='/static/img/NRA.png' style='width: 160px; max-width: 100%;'><br><br>4) Please indicate the charity that your <b>organization donated to</b>:<br>",
         choices=["NRA", "Red Cross"],
         widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
         blank=False
@@ -598,10 +598,10 @@ page_sequence = [
     MatchingResult,
     Charity,
     Organization,
+    Understanding,
     BeforeIQTest,
     MisreportingRule2,
     Score,
-    Understanding,
     Audit,
     Survey_m,
     Survey_o,

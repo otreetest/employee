@@ -60,7 +60,7 @@ Organization
 </div>
 
 <div id="next-button-container">
-    <div id="countdown-timer">Please wait 5 seconds...</div>
+    <div id="countdown-timer">Please wait 15 seconds...</div>
     <div id="hidden-next-button">
         {{ next_button }}
     </div>
@@ -70,7 +70,7 @@ Organization
     document.addEventListener('DOMContentLoaded', function() {
         const countdownTimer = document.getElementById('countdown-timer');
         const hiddenNextButton = document.getElementById('hidden-next-button');
-        let secondsLeft = 5;
+        let secondsLeft = 15;
         
         // Update the countdown timer every second
         const countdownInterval = setInterval(function() {
