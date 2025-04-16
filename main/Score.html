@@ -81,82 +81,25 @@
         }
     }
 </style>
+
 <div class="title-row">
-    <div class="title-text">Survey</div>
+    <div class="title-text">Score</div>
     <div class="title-cards">
         {% include_sibling "GroupNameComponent.html" %}
         {% include_sibling "GroupOrgComponent.html" %}
     </div>
 </div>
-
 {{ endblock }}
 {{ block content }}
-<style>
-    ._formfield {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-    }
-    .form-check-label{
-        width: 3rem;
-        text-align: center;
-        cursor: pointer;
-    }
-    .col-form-label {
-        flex-basis: 16rem;
-    }
-    .option-table{
-        margin-left: 16rem;
-        width: 32rem;
-        table-layout: fixed;
-        text-align: center;
-    }
-    @media (max-width: 50rem) {
-        .option-table {
-            margin-left: 0;
-        }
-    }
-</style>
-
+<br>
 <p>
-    Please answer the following questions. Please use a scale from 1 to 5, where 1 means you disagree strongly and 5 means you strongly agree. You can also use the values in-between to indicate where you fall on the scale. 
+    Your manager stated that they achieved <b>{{ stated_amount }}</b> points, but they answered {{ correct_amount }} questions correctly and thus their actual score is <b>{{ correct_amount }}</b>.
+    <br>
+    <br>
+    If you <b>report</b> them, their potential bonus will be <b>forfeited and donated </b>to the organization’s chosen charity - <b>{{organization}}</b>.  
+   
 </p>
 
-    {% if group.field_maybe_none('organization') == 'NRA' %}
-        <p>During the experiment, my organization donates to <b>NRA</b>, and...</p>
-                
-    {% else %}
-        <p>During the experiment, my organization donates to <b>Red Cross</b>, and...</p>
-            
-    {% endif %}
-
-<div>
-    <table class="table table-bordered option-table">
-        <tr>
-            <td>Disagree strongly</td>
-            <td>Disagree a little</td>
-            <td>Neither agree nor disagree</td>
-            <td>Agree a little</td>
-            <td>Strongly agree</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-        </tr>
-    </table>
-</div>
-{{ formfield "SO1" }}
-{{ formfield "SO2" }}
-{{ formfield "SO3" }}
-{{ formfield "SO4" }}
-{{ formfield "SO5" }}
-{{ formfield "SO6" }}
-{{ formfield "SO7" }}
-
-
-
 {{ next_button }}
+
 {{ endblock }}

@@ -26,6 +26,24 @@ Matching Result
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
+    /* Button countdown styling */
+    #next-button-container {
+        margin-top: 20px;
+        text-align: left;
+    }
+    
+    #countdown-timer {
+        display: inline-block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #555;
+    }
+    
+    /* Hide the next button initially */
+    #hidden-next-button {
+        display: none;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .components-container {
@@ -73,6 +91,32 @@ Matching Result
     </div>
 </div>
 
-{{ next_button }}
+<div id="next-button-container">
+    <div id="countdown-timer">Please wait 10 seconds...</div>
+    <div id="hidden-next-button">
+        {{ next_button }}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const countdownTimer = document.getElementById('countdown-timer');
+        const hiddenNextButton = document.getElementById('hidden-next-button');
+        let secondsLeft = 10;
+        
+        // Update the countdown timer every second
+        const countdownInterval = setInterval(function() {
+            secondsLeft -= 1;
+            countdownTimer.textContent = `Please wait ${secondsLeft} seconds...`;
+            
+            // When countdown reaches zero, show the next button and clear the interval
+            if (secondsLeft <= 0) {
+                clearInterval(countdownInterval);
+                countdownTimer.style.display = 'none';
+                hiddenNextButton.style.display = 'block';
+            }
+        }, 1000);
+    });
+</script>
 
 {{ endblock }}

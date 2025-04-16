@@ -189,12 +189,12 @@ class Player(BasePlayer):
         widget=widgets.RadioSelectHorizontal
     )
     charity_1 = models.StringField(
-        label="1)	Which charity do you identify with?",
+        label="<img src='/static/img/RedCross.png' style='width: 160px; max-width: 100%;'>  <img src='/static/img/NRA.png' style='width: 160px; max-width: 100%;'><br><br>Which charity do you identify with?",
         choices=C.CHALLENGE_CHOICES,
         widget=widgets.RadioSelectHorizontal
     )
     charity_2 = models.StringField(
-        label="2)	If your organization donates to a charity, which one would you prefer?",
+        label="If your organization donates to a charity, which one would you prefer?",
         choices=C.CHALLENGE_CHOICES,
         widget=widgets.RadioSelectHorizontal
     )
@@ -202,11 +202,39 @@ class Player(BasePlayer):
     report_rand_int = models.IntegerField()
 
     report_probability = models.IntegerField(
-        label='What is the probability that you will report your manager?',
+        label='<b>What is the probability that you will report your manager?</b>',
         min=0,
         max=100,
     )
     report = models.BooleanField()
+    
+    choiceE = models.CharField(
+        label="Question 1<br><br><img src='/static/img/PaulKlee.jpg' style='width: 160px; max-width: 100%;'>  <img src='/static/img/VassilyKandinsky.jpg' style='width: 160px; max-width: 100%;'><br><br>Please indicate the painting that you selected at the beginning of the game:<br><br>",
+        choices=["Klee", "Kandinsky"],
+        widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
+        blank=False
+    )
+
+    choiceM = models.CharField(
+        label="Question 2<br><br><img src='/static/img/PaulKlee.jpg' style='width: 160px; max-width: 100%;'>  <img src='/static/img/VassilyKandinsky.jpg' style='width: 160px; max-width: 100%;'><br><br>Please indicate the painting that your manager selected at the beginning of the game:<br><br>",
+        choices=["Klee", "Kandinsky"],
+        widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
+        blank=False
+    )
+
+    choiceT = models.CharField(
+        label="Question 3<br><br><img src='/static/img/PaulKlee.jpg' style='width: 160px; max-width: 100%;'>  <img src='/static/img/VassilyKandinsky.jpg' style='width: 160px; max-width: 100%;'><br><br>Please indicate the painting that represented your team:<br><br>",
+        choices=["Klee", "Kandinsky"],
+        widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
+        blank=False
+    )
+
+    choiceO = models.CharField(
+        label="Question 4<br><br><img src='/static/img/RedCross.png' style='width: 160px; max-width: 100%;'>  <img src='/static/img/NRA.png' style='width: 160px; max-width: 100%;'><br><br>Please indicate the charity that your organization donated to:<br><br>",
+        choices=["NRA", "Red Cross"],
+        widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
+        blank=False
+    )
 
     SM1 = models.IntegerField(label=C.SURVEY_M_QUESTIONS[0], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
     SM2 = models.IntegerField(label=C.SURVEY_M_QUESTIONS[1], choices=range(1, 6), widget=widgets.RadioSelectHorizontal)
@@ -386,9 +414,6 @@ class Painting(Page):
         return {self.id_in_group: 'success'}
     
 
-class WaitingPage1(Page):
-    timeout_seconds = 5
-
 class GroupInfo(Page):
     def vars_for_template(self):
         group = self.group
@@ -410,9 +435,6 @@ class Organization(Page):
             'team': group.field_maybe_none('team') or 'Not assigned'
         }
 
-class WaitingPage2(Page):
-    timeout_seconds = 5
-    
 
 class MatchingResult(Page):
     def vars_for_template(self):
@@ -442,6 +464,26 @@ class MisreportingRule2(Page):
             'organization': group.field_maybe_none('organization') or 'Not assigned',
             'threshold_integer': self.field_maybe_none('manager_threshold_integer') or '8'  # Default to 8 if not found
         }
+
+class Score(Page):
+    form_model = 'player'
+    def vars_for_template(self, timeout_happened=False):   
+        # Safely get stored manager data with defaults if None
+        stated_amount = self.field_maybe_none('manager_stated_amount') or 'Not available'
+        correct_amount = self.field_maybe_none('manager_correct_amount') or 'Not available'
+        group = self.group
+        
+        return {
+            'stated_amount': stated_amount,
+            'correct_amount': correct_amount,
+            'manager_id': self.field_maybe_none('matched_manager_id') or 'Not matched',
+            'team': group.field_maybe_none('team') or 'Not assigned',
+            'organization': group.field_maybe_none('organization') or 'Not assigned'
+        }
+    
+class Understanding(Page):
+    form_model = 'player'
+    form_fields = ['choiceE','choiceM','choiceT','choiceO']
 
 
 class Audit(Page):
@@ -492,7 +534,7 @@ class Survey_m(Page):
 class Survey_o(Page):
     form_model = 'player'
     form_fields = [f'SO{i}' for i in range(1, len(C.SURVEY_O_QUESTIONS) + 1)]
-    
+
     def vars_for_template(self):
         group = self.group
         return {
@@ -500,6 +542,16 @@ class Survey_o(Page):
             'organization': group.field_maybe_none('organization') or 'Not assigned'
         }
 
+class Survey_c(Page):
+    form_model = 'player'
+    form_fields = ['charity_1', 'charity_2']
+
+    def vars_for_template(self):
+        group = self.group
+        return {
+            'team': group.field_maybe_none('team') or 'Not assigned',
+            'organization': group.field_maybe_none('organization') or 'Not assigned'
+        }
 
 class Big5(Page):
     form_model = 'player'
@@ -543,16 +595,17 @@ class Result(Page):
 page_sequence = [
     Role,
     Painting,
-    WaitingPage1, 
     MatchingResult,
     Charity,
-    WaitingPage2, 
     Organization,
     BeforeIQTest,
     MisreportingRule2,
+    Score,
+    Understanding,
     Audit,
     Survey_m,
     Survey_o,
+    Survey_c,
     Big5, 
     Comparison, 
     Dictator, 
