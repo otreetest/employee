@@ -1,7 +1,6 @@
 import random
 import csv
 import os
-from otree.api import WaitPage
 from otree.api import *
 
 doc = """
@@ -15,7 +14,7 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
     PREFER_CHOICES = ['Left', 'Right']
-    CHALLENGE_CHOICES = ['NRA', 'Red Cross']
+    CHALLENGE_CHOICES = ['Red Cross', 'NRA']
     SURVEY_M_QUESTIONS = [
         'I see myself as a member of the team.',
         'I am glad to be in this team.',
@@ -165,16 +164,15 @@ def creating_session(self:Subsession):
 
 
 class Group(BaseGroup):
-    prefer = models.StringField()
-    team = models.StringField()
-    organization = models.StringField()
-    
-    # Fields to store matched manager data
-    manager_id = models.StringField()
-    manager_prefer = models.StringField()
-
+    pass
 
 class Player(BasePlayer):
+    group_prefer = models.StringField()
+    group_team = models.StringField()
+    group_organization = models.StringField()
+    group_manager_id = models.StringField()
+    group_manager_prefer = models.StringField()
+    
     # Store the matched manager's ID for reference
     matched_manager_id = models.StringField()
     
@@ -231,7 +229,7 @@ class Player(BasePlayer):
 
     choiceO = models.CharField(
         label="<br><img src='/static/img/RedCross.png' style='width: 160px; max-width: 100%;'>  <img src='/static/img/NRA.png' style='width: 160px; max-width: 100%;'><br><br>4) Please indicate the charity that your <b>organization donated to</b>:<br>",
-        choices=["NRA", "Red Cross"],
+        choices=["Red Cross", "NRA"],
         widget=widgets.RadioSelectHorizontal,  # Changed from RadioSelect to RadioSelectHorizontal
         blank=False
     )
@@ -332,9 +330,9 @@ class Role(Page):
         used_ids = subsession.used_manager_ids.split(',') if subsession.used_manager_ids else []
 
         # Filter out already used manager IDs
-        id_column = column_indices.get('participant.id_in_session', -1)
+        id_column = column_indices.get('participantid_in_session', -1)
         if id_column == -1:
-            print("Warning: Could not find participant.id_in_session column")
+            print("Warning: Could not find participantid_in_session column")
             return
             
         available_managers = [row for row in manager_data 
@@ -357,32 +355,31 @@ class Role(Page):
         subsession.used_manager_ids = ','.join(used_ids)
         
         # Store the manager's preferred painting in the group
-        group = player.group
-        group.manager_id = manager_id
+        player.group_manager_id = manager_id
         
         # Get the manager's preferred painting from the data
-        prefer_column = column_indices.get('main.1.player.prefer', -1)
+        prefer_column = column_indices.get('main1playerprefer', -1)
         if prefer_column != -1 and prefer_column < len(selected_manager):
-            group.manager_prefer = selected_manager[prefer_column]
+            player.group_manager_prefer = selected_manager[prefer_column]
 
             # Set the group's prefer based on the manager's preference
-            group.prefer = group.manager_prefer
+            player.group_prefer = player.group_manager_prefer
             
             # Map the preference to a team
             painting_mapping = {
                 'Left': 'Klee',
                 'Right': 'Kandinsky'
             }
-            if group.prefer in painting_mapping:
-                group.team = painting_mapping[group.prefer]
+            if player.group_prefer in painting_mapping:
+                player.group_team = painting_mapping[player.group_prefer]
             
             # Randomly select an organization
-            group.organization = random.choice(C.CHALLENGE_CHOICES)
+            player.group_organization = random.choice(C.CHALLENGE_CHOICES)
         
         # Store manager's stated amount and correct amount for later use
-        stated_amount_column = column_indices.get('main.1.player.stated_amount', -1)
-        correct_amount_column = column_indices.get('main.1.player.briefing_correct_amount', -1)
-        threshold_integer_column = column_indices.get('main.1.player.threshold_integer', -1)
+        stated_amount_column = column_indices.get('main1playerstated_amount', -1)
+        correct_amount_column = column_indices.get('main1playerbriefing_correct_amou', -1)
+        threshold_integer_column = column_indices.get('main1playerthreshold_integer', -1)
         
         if stated_amount_column != -1 and stated_amount_column < len(selected_manager):
             player.manager_stated_amount = selected_manager[stated_amount_column]
@@ -399,27 +396,28 @@ class Painting(Page):
     form_model = 'player'
     form_fields = ['prefer']
     
-    def vars_for_template(self):
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
         # Safely access manager_prefer with a default value if it's None
-        manager_prefer = group.field_maybe_none('manager_prefer') or 'Not available'
+        manager_prefer = player.field_maybe_none('group_manager_prefer') or 'Not available'
         return {
             'manager_prefer': manager_prefer,
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned'
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned'
         }
-    
-    def live_method(self, data):
-        group = self.group
-        return {self.id_in_group: 'success'}
+    @staticmethod
+    def live_method(player:Player, data):
+        
+        return {player.id_in_group: 'success'}
     
 
 class GroupInfo(Page):
-    def vars_for_template(self):
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
+        
         return {
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned'
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned'
         }
     
 
@@ -431,54 +429,58 @@ class Organization(Page):
     def vars_for_template(player: Player):
         group = player.group
         return {
-            'organization': group.field_maybe_none('organization') or 'Not assigned',
-            'team': group.field_maybe_none('team') or 'Not assigned'
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned',
+            'team': player.field_maybe_none('group_team') or 'Not assigned'
         }
 
 
 class MatchingResult(Page):
-    def vars_for_template(self):
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
+        
         return {
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned',
-            'player_prefer': self.field_maybe_none('prefer'),
-            'group_prefer': group.field_maybe_none('prefer')
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned',
+            'player_prefer': player.field_maybe_none('prefer'),
+            'group_prefer': player.field_maybe_none('group_prefer')
         }
 
 
 class BeforeIQTest(Page):
-    def vars_for_template(self):
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
+        
         return {
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned'
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned'
         }
 
 
 class MisreportingRule2(Page):
-    def vars_for_template(self):
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
+        
         return {
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned',
-            'threshold_integer': self.field_maybe_none('manager_threshold_integer') or '8'  # Default to 8 if not found
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned',
+            'threshold_integer': player.field_maybe_none('manager_threshold_integer') or '8'  # Default to 8 if not found
         }
 
 class Score(Page):
     form_model = 'player'
-    def vars_for_template(self, timeout_happened=False):   
+    @staticmethod
+    def vars_for_template(player: Player, timeout_happened=False):
         # Safely get stored manager data with defaults if None
-        stated_amount = self.field_maybe_none('manager_stated_amount') or 'Not available'
-        correct_amount = self.field_maybe_none('manager_correct_amount') or 'Not available'
-        group = self.group
+        stated_amount = player.field_maybe_none('manager_stated_amount') or 'Not available'
+        correct_amount = player.field_maybe_none('manager_correct_amount') or 'Not available'
+        
         
         return {
             'stated_amount': stated_amount,
             'correct_amount': correct_amount,
-            'manager_id': self.field_maybe_none('matched_manager_id') or 'Not matched',
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned'
+            'manager_id': player.field_maybe_none('matched_manager_id') or 'Not matched',
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned'
         }
     
 class Understanding(Page):
@@ -489,45 +491,46 @@ class Understanding(Page):
 class Audit(Page):
     form_model = 'player'
     form_fields = ['report_probability']
-    
-    def vars_for_template(self, timeout_happened=False):
+    @staticmethod
+    def vars_for_template(player:Player, timeout_happened=False):
         # Generate a random integer for the reporting mechanism
-        self.report_rand_int = random.randint(0, 100)
+        player.report_rand_int = random.randint(0, 100)
         
         # Safely get stored manager data with defaults if None
-        stated_amount = self.field_maybe_none('manager_stated_amount') or 'Not available'
-        correct_amount = self.field_maybe_none('manager_correct_amount') or 'Not available'
-        group = self.group
+        stated_amount = player.field_maybe_none('manager_stated_amount') or 'Not available'
+        correct_amount = player.field_maybe_none('manager_correct_amount') or 'Not available'
+        
         
         return {
             'stated_amount': stated_amount,
             'correct_amount': correct_amount,
-            'manager_id': self.field_maybe_none('matched_manager_id') or 'Not matched',
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned'
+            'manager_id': player.field_maybe_none('matched_manager_id') or 'Not matched',
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned'
         }
-    
-    def before_next_page(self, timeout_happened=False):
+    @staticmethod
+    def before_next_page(player:Player, timeout_happened=False):
         # Determine if the report is successful based on the probability
-        if self.report_probability > self.report_rand_int:
-            self.report = True
-            self.session.vars['report'] = True
+        if player.report_probability > player.report_rand_int:
+            player.report = True
+            player.session.vars['report'] = True
         else:
-            self.report = False
-            self.session.vars['report'] = False
+            player.report = False
+            player.session.vars['report'] = False
 
 
 class Survey_m(Page):
     form_model = 'player'
     form_fields = [f'SM{i}' for i in range(1, len(C.SURVEY_M_QUESTIONS) + 1)]
     
-    def vars_for_template(self):
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
+        
         return {
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned',
-            'player_prefer': self.field_maybe_none('prefer'),
-            'group_prefer': group.field_maybe_none('prefer')
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned',
+            'player_prefer': player.field_maybe_none('prefer'),
+            'group_prefer': player.field_maybe_none('group_prefer')
         }
 
 
@@ -535,22 +538,24 @@ class Survey_o(Page):
     form_model = 'player'
     form_fields = [f'SO{i}' for i in range(1, len(C.SURVEY_O_QUESTIONS) + 1)]
 
-    def vars_for_template(self):
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
+        
         return {
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned'
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned'
         }
 
 class Survey_c(Page):
     form_model = 'player'
     form_fields = ['charity_1', 'charity_2']
 
-    def vars_for_template(self):
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
+        
         return {
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned'
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned'
         }
 
 class Big5(Page):
@@ -567,7 +572,8 @@ class Dictator(Page):
     form_model = 'player'
     form_fields = ['dictator_keep']
     
-    def vars_for_template(self):
+    @staticmethod
+    def vars_for_template(player: Player):
         return {
             'endowment': C.DICTATOR_ENDOWMENT
         }
@@ -579,16 +585,17 @@ class Info(Page):
 
 
 class Result(Page):
-    def vars_for_template(self):
-        report_status = self.session.vars.get('report', False)
-        group = self.group
+    @staticmethod
+    def vars_for_template(player: Player):
+        report_status = player.session.vars.get('report', False)
+        
         
         return {
-            'manager_id': self.field_maybe_none('matched_manager_id') or 'Not matched',
-            'team': group.field_maybe_none('team') or 'Not assigned',
-            'organization': group.field_maybe_none('organization') or 'Not assigned',
+            'manager_id': player.field_maybe_none('matched_manager_id') or 'Not matched',
+            'team': player.field_maybe_none('group_team') or 'Not assigned',
+            'organization': player.field_maybe_none('group_organization') or 'Not assigned',
             'report': report_status,
-            'player_payoff': self.payoff
+            'player_payoff': player.payoff
         }
 
 

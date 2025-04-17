@@ -124,7 +124,7 @@
     
 </p>
 
-    {% if player.field_maybe_none('prefer') == group.field_maybe_none('prefer') %}
+    {% if player.field_maybe_none('prefer') == player.field_maybe_none('group_prefer') %}
         <p>During the experiment, my manager and I have chosen the <strong>same</strong> painting, and...</p>
                     
     {% else %}

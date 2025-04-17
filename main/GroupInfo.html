@@ -4,7 +4,7 @@
 <div class="group-image-layout">
     <div>
         <h2>Group Information</h2>
-            {{if player.prefer == group.prefer }}
+            {{if player.prefer == player.group_prefer }}
                 <p>Your manager selected the <strong>same</strong> painting with you.</p>
                 <br>
                 Your team will be named after the artist of the selected painting.
@@ -15,7 +15,7 @@
             {{endif}}
 
         <p>
-            The team is now called: <b>{{group.team}}</b>, and this painting will represent your team.
+            The team is now called: <b>{{player.group_team}}</b>, and this painting will represent your team.
         </p>
 
     </div>

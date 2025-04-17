@@ -5,10 +5,10 @@
     </div>
     <div class="card-body">
         <p>Your organization donates to: 
-            {% if group.field_maybe_none('organization') == 'NRA' %}
+            {% if player.field_maybe_none('group_organization') == 'NRA' %}
                 <strong>NRA</strong>
                     <br><img src="{{ static 'img/NRA.png' }}" alt="NRA" style="height: 6rem; width: auto;">
-            {% elif group.field_maybe_none('organization') == 'Red Cross' %}
+            {% elif player.field_maybe_none('group_organization') == 'Red Cross' %}
                 <strong>Red Cross</strong>
                     <br><img src="{{ static 'img/RedCross.png' }}" alt="Red Cross" style="height: 6rem; width: auto;">
             {% else %}

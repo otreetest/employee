@@ -5,10 +5,10 @@
     </div>
     <div class="card-body">
         <p>Your manager choosed: 
-            {% if group.field_maybe_none('prefer') == 'Left' %}
+            {% if player.field_maybe_none('group_prefer') == 'Left' %}
                 <strong>Klee</strong>
                     <br><img src="{{ static 'img/PaulKlee.jpg' }}" alt="Paul Klee Painting" style="height: 6rem; width: auto;">
-            {% elif group.field_maybe_none('prefer') == 'Right' %}
+            {% elif player.field_maybe_none('group_prefer') == 'Right' %}
                 <strong>Kandinsky</strong>
                     <br><img src="{{ static 'img/VassilyKandinsky.jpg' }}" alt="Vassily Kandinsky Painting" style="height: 6rem; width: auto;">
             {% else %}

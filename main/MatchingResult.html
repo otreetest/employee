@@ -68,7 +68,7 @@ Matching Result
 </style>
 
 <div class="group-image-layout">
-    {% if player.field_maybe_none('prefer') == group.field_maybe_none('prefer') %}
+    {% if player.field_maybe_none('prefer') == player.field_maybe_none('group_prefer') %}
         <p>Your manager selected the <strong>same</strong> painting with you.
         <br>  
         Your team is named after the artist of your chosen painting: <b>{{ team }}</b>

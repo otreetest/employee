@@ -122,7 +122,7 @@
     Please answer the following questions. Please use a scale from 1 to 5, where 1 means you disagree strongly and 5 means you strongly agree. You can also use the values in-between to indicate where you fall on the scale. 
 </p>
 
-    {% if group.field_maybe_none('organization') == 'NRA' %}
+    {% if player.field_maybe_none('group_organization') == 'NRA' %}
         <p>During the experiment, my organization donates to <b>NRA</b>, and...</p>
                 
     {% else %}
